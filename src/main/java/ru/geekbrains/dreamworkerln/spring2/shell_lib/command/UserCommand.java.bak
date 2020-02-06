@@ -1,0 +1,114 @@
+package ru.kvant_telecom.tv.command;
+
+import ru.kvant_telecom.tv.model.CliUser;
+import ru.kvant_telecom.tv.model.Gender;
+import InputReader;
+import ShellHelper;
+import BeanTableModelBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
+import org.springframework.shell.table.*;
+import org.springframework.util.StringUtils;
+
+import java.util.*;
+
+@ShellComponent
+public class UserCommand {
+
+    private ShellHelper shellHelper;
+
+    private InputReader inputReader;
+
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    public void setShellHelper(ShellHelper shellHelper) {
+        this.shellHelper = shellHelper;
+    }
+    @Autowired
+    public void setInputReader(InputReader inputReader) {
+        this.inputReader = inputReader;
+    }
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+    
+
+    @ShellMethod("Create new user with supplied username")
+    public void createUser(@ShellOption({"-U", "--username"}) String username) {
+
+        CliUser user = new CliUser();
+        user.setUsername(username);
+
+        shellHelper.printInfo("Please enter new user data:");
+        // 1. read user's fullName --------------------------------------------
+        do {
+            String fullName = inputReader.prompt("Full name");
+            if (StringUtils.hasText(fullName)) {
+                user.setFullName(fullName);
+            } else {
+                shellHelper.printWarning("User's full name CAN NOT be empty string? Please enter valid value!");
+            }
+        } while (user.getFullName() == null);
+
+        // 2. read user's password --------------------------------------------
+        do {
+            String password = inputReader.prompt("Password", "secret", false);
+            if (StringUtils.hasText(password)) {
+                user.setPassword(password);
+            } else {
+                shellHelper.printWarning("Password'CAN NOT be empty string? Please enter valid value!");
+            }
+        } while (user.getPassword() == null);
+
+        // 3. Prompt for user's Gender ----------------------------------------------
+        Map<String, String> options = new HashMap<>();
+        options.put("M", Gender.MALE.name());
+        options.put("F", Gender.FEMALE.name() );
+        options.put("D", Gender.DIVERSE.name());
+
+        String genderValue = inputReader.selectFromList("Gender", "Please enter one of the [] values", options, true, null);
+        Gender gender = Gender.valueOf(options.get(genderValue.toUpperCase()));
+        user.setGender(gender);
+
+        // 4. Prompt for superuser attribute
+        String superuserValue = inputReader.promptWithOptions("New user is superuser", "N", Arrays.asList("Y", "N"));
+        if ("Y".equals(superuserValue)) {
+            user.setSuperuser(true);
+        } else {
+            user.setSuperuser(false);
+        }
+
+        // Print user's input -------------------------------------------------
+        shellHelper.printInfo("\nCreating a new user:");
+        displayUser(user);
+        shellHelper.printSuccess("---> SUCCESS created user with id=" + user.getId());
+    }
+
+    private void displayUser(CliUser user) {
+        LinkedHashMap<String, Object> labels = new LinkedHashMap<>();
+        labels.put("id", "Id");
+        labels.put("username", "Username");
+        labels.put("fullName", "Full name");
+        labels.put("gender", "Gender");
+        labels.put("superuser", "Superuser");
+        labels.put("password", "Password");
+
+        String[] header = new String[] {"Property", "Value"};
+        BeanTableModelBuilder builder = new BeanTableModelBuilder(user, objectMapper);
+        TableModel model = builder.withLabels(labels).withHeader(header).build();
+
+        TableBuilder tableBuilder = new TableBuilder(model);
+
+        tableBuilder.addInnerBorder(BorderStyle.fancy_light);
+        tableBuilder.addHeaderBorder(BorderStyle.fancy_double);
+        tableBuilder.on(CellMatchers.column(0)).addSizer(new AbsoluteWidthSizeConstraints(20));
+        tableBuilder.on(CellMatchers.column(1)).addSizer(new AbsoluteWidthSizeConstraints(30));
+        shellHelper.print(tableBuilder.build().render(80));
+    }
+
+}

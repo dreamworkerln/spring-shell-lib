@@ -1,0 +1,34 @@
+package ru.geekbrains.dreamworkerln.spring2.shell_lib.command;
+
+import org.jline.terminal.Terminal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.shell.Command;
+import org.springframework.shell.result.ThrowableResultHandler;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+
+/**
+ * A command to display the full stacktrace when an error occurs.
+ */
+@ShellComponent
+public class FullStacktrace implements Command {
+
+
+    @Autowired
+    @Lazy
+    private Terminal terminal;
+
+    @Autowired
+    private ThrowableResultHandler throwableResultHandler;
+
+
+    @ShellMethod(key = "fullstacktrace", value = "Display the full stacktrace of the last error.")
+    public void fullStacktrace() {
+        System.out.println("OLOLO!!!!!!");
+
+        if (throwableResultHandler.getLastError() != null) {
+            throwableResultHandler.getLastError().printStackTrace(terminal.writer());
+        }
+    }
+}
