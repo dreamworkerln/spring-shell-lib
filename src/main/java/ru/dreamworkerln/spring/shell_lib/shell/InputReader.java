@@ -1,7 +1,6 @@
-package ru.geekbrains.dreamworkerln.spring2.shell_lib.shell;
+package ru.dreamworkerln.spring.shell_lib.shell;
 
 import org.jline.reader.LineReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package ru.geekbrains.dreamworkerln.spring2.shell_lib.shell;
+package ru.dreamworkerln.spring.shell_lib.shell;
 
 import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedStringBuilder;
@@ -9,16 +9,16 @@ import org.springframework.util.StringUtils;
 
 public class ShellHelper {
 
-    @Value("${shell.out.info:CYAN}")
+    @Value("${shell.out.info.colour:CYAN}")
     public String infoColor;
 
-    @Value("${shell.out.success:GREEN}")
+    @Value("${shell.out.success.colour:GREEN}")
     public String successColor;
 
-    @Value("${shell.out.warning:YELLOW}")
+    @Value("${shell.out.warning.colour:YELLOW}")
     public String warningColor;
 
-    @Value("${shell.out.error:RED}")
+    @Value("${shell.out.error.colour:RED}")
     public String errorColor;
 
     private Terminal terminal;

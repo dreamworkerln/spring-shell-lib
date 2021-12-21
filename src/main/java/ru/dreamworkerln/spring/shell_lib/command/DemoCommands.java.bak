@@ -1,4 +1,4 @@
-package ru.kvant_telecom.tv.shell_lib.command;
+package ru.dreamworkerln.spring.shell_lib.command;
 
 import org.jline.reader.LineReader;
 import org.springframework.beans.factory.annotation.Autowired;

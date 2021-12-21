@@ -1,4 +1,4 @@
-package ru.geekbrains.dreamworkerln.spring2.shell_lib.configuration;
+package ru.dreamworkerln.spring.shell_lib.configuration;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,8 @@ import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.jline.JLineShellAutoConfiguration;
-import ru.geekbrains.dreamworkerln.spring2.shell_lib.shell.*;
+import ru.dreamworkerln.spring.shell_lib.shell.*;
+
 
 @Configuration
 public class SpringShellLibConfig {

@@ -1,4 +1,4 @@
-package ru.geekbrains.dreamworkerln.spring2.shell_lib.shell.table;
+package ru.dreamworkerln.spring.shell_lib.shell.table;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

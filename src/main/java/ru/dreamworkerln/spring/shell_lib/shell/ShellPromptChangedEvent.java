@@ -1,4 +1,4 @@
-package ru.geekbrains.dreamworkerln.spring2.shell_lib.shell;
+package ru.dreamworkerln.spring.shell_lib.shell;
 
 import org.springframework.context.ApplicationEvent;
 
